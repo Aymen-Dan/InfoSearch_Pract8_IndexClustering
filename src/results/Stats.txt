@@ -1,7 +1,7 @@
-Time taken to complete BSBI: 124285300 ns,
-or 124.2853 ms,
-or 0.1242853 s.
+Time taken to complete BSBI: 327498700 ns,
+or 327.4987 ms,
+or 0.3274987 s.
 
-Number of files indexed: 1
+Number of files indexed: 10
 
-Total file size indexed: 7.623046875 KB
+Total file size indexed: 101.5517578125 KB
