@@ -7,16 +7,33 @@ public class IndexedCluster {
 
     private BSBI_Index bsbiIndex;
 
-    public String resDirectoryPath;
+    public String resourceDirectoryPath;
+    public String resultDirectoryPath;
+
+    int numOfClusters;
 
 
-    public IndexedCluster(String directoryPath, int blockSize) {
-        this.bsbiIndex = new BSBI_Index(directoryPath, blockSize);
-        this.resDirectoryPath = directoryPath;
+    public IndexedCluster(BSBI_Index idx, String resultsPath, int k) throws IOException {
+        this.bsbiIndex = idx;
+        this.resultDirectoryPath = resultsPath;
+        this.numOfClusters = k;
+
+        System.out.println("Index.txt & Stats.txt path: " + resultsPath + ";\nk (num of clusters): " + k);
+
+
+        //performKMeansClustering(numOfClusters);
     }
 
-    public String getResDirectoryPath(){
-        return resDirectoryPath;
+    public String getResourceDirectoryPath(){
+        return resourceDirectoryPath;
+    }
+
+    public String getResultDirectoryPath(){
+        return resultDirectoryPath;
+    }
+
+    public int getNumOfClusters(){
+        return numOfClusters;
     }
 
     // Perform K-means clustering on the indexed documents
@@ -27,28 +44,15 @@ public class IndexedCluster {
         // Extract the text content of documents
         List<String> documents = index.values().stream()
                 .flatMap(List::stream)
-                .distinct()
-                .collect(Collectors.toList());
+                .distinct().toList();
 
         // Perform K-means clustering
-        KMeans kMeans = new KMeans(k, this.resDirectoryPath);
-        Map<Integer, List<String>> clusters = kMeans.cluster();
+        KMeans kMeans = new KMeans(k, this.resultDirectoryPath);
 
-        return clusters;
+        return kMeans.cluster();
     }
 
-    public static void main(String[] args) throws IOException {
-        String directoryPath = "your_directory_path"; //Specify the path to indexed documents directory
-        int blockSize = 10; // Example block size
-        int k = 3; // Specify the number of clusters
 
-        IndexedCluster indexedCluster = new IndexedCluster(directoryPath, blockSize);
-        Map<Integer, List<String>> clusters = indexedCluster.performKMeansClustering(k);
 
-        // Print the clusters
-        for (Map.Entry<Integer, List<String>> entry : clusters.entrySet()) {
-            System.out.println("Cluster " + entry.getKey() + ": " + entry.getValue());
-        }
-    }
 }
 
