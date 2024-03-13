@@ -62,7 +62,7 @@ public class BSBI_Index {
     // Tokenize a document into terms
     private List<String> tokenize(String document) {
         // You may want to improve this based on your specific needs
-        String[] terms = document.toLowerCase().split("\\s+");
+        String[] terms = document.toLowerCase().replaceAll("[.,;?!]", "").split("\\s+");
         return Arrays.asList(terms);
     }
 
@@ -200,4 +200,3 @@ public class BSBI_Index {
         }
     }
 }
-
