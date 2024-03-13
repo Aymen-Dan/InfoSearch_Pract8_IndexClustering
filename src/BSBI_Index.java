@@ -24,6 +24,10 @@ public class BSBI_Index {
         writeStatisticsToFile();
     }
 
+    public Map<String, List<String>> getIndex() {
+        return this.index;
+    }
+
     // Getter for elapsed time
     public long getElapsedTime() {
         return elapsedTime;
@@ -47,8 +51,8 @@ public class BSBI_Index {
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(filePath))) {
             writer.println("Time taken to complete BSBI: " + this.getElapsedTime() + " ns,\nor " + this.getElapsedTime() / 1_000_000.0 + " ms,\nor " + this.getElapsedTime() / 1_000_000_000.0 + " s.");
-            writer.println("\nNumber of files indexed: " + numFilesIndexed);
-            writer.println("\nTotal file size indexed: " + totalFileSize + " KB");
+            writer.println("\nNumber of files indexed: " + this.getNumFilesIndexed());
+            writer.println("\nTotal file size indexed: " + this.getTotalFileSize() + " KB");
             System.out.println("Statistics saved to: " + filePath);
         } catch (IOException e) {
             e.printStackTrace();
@@ -85,11 +89,11 @@ public class BSBI_Index {
         totalFileSize /= 1024.0;  // Convert to KB
 
         // Step 1: Partitioning
-        int numBlocks = (int) Math.ceil((double) numFilesIndexed / blockSize);
+        int numBlocks = (int) Math.ceil((double) this.getTotalFileSize() / blockSize);
 
         for (int blockNum = 0; blockNum < numBlocks; blockNum++) {
             int startIdx = blockNum * blockSize;
-            int endIdx = Math.min((blockNum + 1) * blockSize, numFilesIndexed);
+            int endIdx = Math.min((blockNum + 1) * blockSize, this.getNumFilesIndexed());
             File[] blockFiles = Arrays.copyOfRange(files, startIdx, endIdx);
 
             List<Map.Entry<String, String>> blockTerms = new ArrayList<>();
@@ -173,8 +177,8 @@ public class BSBI_Index {
         System.out.println("Time taken to complete BSBI: " + this.getElapsedTime() + " ns," +
                 "\nor " + this.getElapsedTime() / 1_000_000.0 + " ms," +
                 "\nor " + this.getElapsedTime() / 1_000_000_000.0 +
-                " s.\nNumber of files indexed: " + numFilesIndexed +
-                "\nTotal file size indexed: " + totalFileSize + " KB");
+                " s.\nNumber of files indexed: " + this.getNumFilesIndexed() +
+                "\nTotal file size indexed: " + this.getTotalFileSize() + " KB");
     }
 
 
